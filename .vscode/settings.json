@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "python.h": "c",
+        "patchlevel.h": "c",
+        "emmintrin.h": "c",
+        "pymem.h": "c"
+    }
+}

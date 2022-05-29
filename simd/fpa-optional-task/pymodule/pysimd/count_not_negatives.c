@@ -1,6 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <emmintrin.h>
+#include "decor.c"
 
 static size_t count_not_negatives_impl(int16_t* array, size_t size) {
     size_t roundedSize = size / 8 * 8;
@@ -29,28 +30,5 @@ static size_t count_not_negatives_impl(int16_t* array, size_t size) {
 }
 
 static PyObject* count_not_negatives_decor(PyObject *self, PyObject *args) {
-    PyObject* argument;
-    Py_buffer array;
-    int argumentSuccessfullyParsed = PyArg_ParseTuple(args, "O", &argument);
-    if (!argumentSuccessfullyParsed) {
-        PyErr_SetString(PyExc_TypeError, "Invalid argument");
-        return NULL;
-    }
-    int arraySuccessfullyParsed = PyObject_GetBuffer(
-        argument, &array, PyBUF_ANY_CONTIGUOUS | PyBUF_FORMAT
-    );
-    if (arraySuccessfullyParsed) {
-        PyErr_SetString(PyExc_TypeError, "Invalid argument 2");
-        return NULL;
-    }
-    int arrayIsOneDimentionalAndContainsInt16 
-            = ((array.ndim == 1) && (strcmp(array.format, "h") == 0));
-    if (!arrayIsOneDimentionalAndContainsInt16) {
-        PyErr_SetString(PyExc_TypeError, "Expected a flat array of 16-bit integers");
-        PyBuffer_Release(&array);
-        return NULL;
-    }
-    size_t result = count_not_negatives_impl(array.buf, array.shape[0]);
-    PyBuffer_Release(&array);
-    return PyLong_FromSize_t(result);
+    return array_int16t_to_sizet_decor(self, args, count_not_negatives_impl);
 }
