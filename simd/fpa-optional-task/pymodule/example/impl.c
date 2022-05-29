@@ -1,7 +1,7 @@
 #include <Python.h>
 
 size_t do_count(int16_t* input, size_t size) {
-  return ...
+  return 0; // TODO: implement
 }
 
 static PyObject* count_geq0(PyObject *self, PyObject *args) {
@@ -31,7 +31,8 @@ static PyObject* count_geq0(PyObject *self, PyObject *args) {
 PyMODINIT_FUNC PyInit_simdcount(void) {
     static PyMethodDef module_methods[] = {
         {"count_geq0", (PyCFunction)count_geq0, METH_VARARGS, "Count >= 0"},
-        {NULL}};
+        {NULL}
+    };
     static struct PyModuleDef module_def = {
         PyModuleDef_HEAD_INIT,
         "simdcount",
