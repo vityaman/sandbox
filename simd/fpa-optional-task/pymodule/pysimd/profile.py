@@ -46,17 +46,17 @@ if __name__ == '__main__':
         c_for_loop, c_simd
     )
     sizes = (
-        0, 10, 100, 500, 1000, 2000, 5000, 
-        10_000, 15_000, 20_000, 30_000, 50_000,
-        100_000, 200_000, 500_000, 1_000_000,
-        10_000_000
+        0, 100, 1000, 10_000, 50_000, 100_000, 300_000, 
+        500_000, 1_000_000, 2_000_000, 5_000_000, 10_000_000    
     )
     table = [
         ("method", *sizes)
     ]
     for method in methods:
+        print(f'Method {method.__name__} is running')
         row = [method.__name__]
         for size in sizes:
+            print(f'For size: {size}')
             generate_random_array(size)
             sum = 0; N = 5
             for attempt in range(N):
