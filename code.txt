@@ -78,7 +78,3 @@ CYCL:   LD      CNT     ; - INFINITE LOOP
         SUB    #0x02
         CALL   $SAVE
         JUMP    CYCL
-
-Также я сделал дополнительное задание: 
-src: https://github.com/vityaman/sandbox/tree/main/simd/fpa-optional-task/pymodule/pysimd, 
-
