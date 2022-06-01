@@ -1,0 +1,84 @@
+        ORG     0x000
+V0:     WORD   $INT0,  0x180
+V1:     WORD   $INT1,  0x180 
+V2:     WORD   $INT2,  0x180 
+V3:     WORD   $INT3,  0x180
+v4:     WORD   $INT4,  0x180
+v5:     WORD   $INT5,  0x180
+v6:     WORD   $INT6,  0x180
+V7:     WORD   $INT7,  0x180 
+V8:     WORD   $INT8,  0x180 
+V9:     WORD   $INT9,  0x180 
+
+INT0:   IRET
+INT1:   IN      0x03
+        IRET
+INT2:   IN      0x05    ; RESET READY
+        IN      0x04
+        PUSH
+        ASL 
+        ADD    &0x00
+        SWAP
+        LD     CNT
+        SUB    &0x00
+        CALL   $SAVE
+        POP
+        IRET
+INT3:   IN      0x07    ; RESET READY
+        LD      CNT
+        PUSH
+        ASL
+        ASL
+        ADD    &0x00
+        NEG
+        ADD    #0x05
+        OUT     0x06
+        POP
+        IRET
+INT4:   IN      0x0A
+        IRET
+INT5:   IN      0x0E
+        IRET
+INT6:   IN      0x12
+        IRET
+INT7:   IN      0x16
+        IRET
+INT8:   IN      0x1A
+        IRET
+INT9:   IN      0x1E
+        IRET
+
+; PRED: AC IS SET TO VALUE THAT YOU WANT TO STORE IN CNT
+; POST: AC = VALUE IF IT IS IN SCOPE OF CNT
+;       AC = XMV   IF NOT
+MXV:    WORD    0x199A
+MNV:    WORD    0xE667
+SAVE:   PUSH
+        CMP     MNV
+        BLT     OVFL
+        LD      MXV
+        CMP    &0x00
+        BLT     OVFL    ; POSSIBLE OPTIMIZATION AS MXV IS ALREADY LOADED
+        POP
+        ST      CNT
+        RET
+OVFL:   LD      MXV
+        SUB    #0x01
+        ST      CNT
+        POP
+        RET 
+
+CNT:    WORD    0x1990  ; - LIFE-AFFIRMING COUNTER
+START:  LD     #0x0B    ; | PREPARATION 
+        OUT     0x07    ; | OF
+        LD     #0x0A    ; | IN/OUT
+        OUT     0x05    ; | DEVICES 
+        EI
+CYCL:   LD      CNT     ; - INFINITE LOOP
+        SUB    #0x02
+        CALL   $SAVE
+        JUMP    CYCL
+
+Также я сделал дополнительное задание: 
+src: https://github.com/vityaman/sandbox/tree/main/simd/fpa-optional-task/pymodule/pysimd, 
+
